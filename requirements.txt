@@ -1,1 +1,2 @@
 pandas_ta
+scikit-learn
