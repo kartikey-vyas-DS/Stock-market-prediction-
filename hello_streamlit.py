@@ -39,9 +39,13 @@ def get_indian_stock_tickers():
     return indian_tickers
 
 # Define function to fetch historical stock data
-def get_historical_data(ticker,start_date,end_date):
-    stock_data = pdr.get_data_yahoo(ticker, start=start_date, end=end_date)
-    return stock_data
+def get_historical_data(ticker, start_date, end_date):
+    try:
+        stock_data = pdr.get_data_yahoo(ticker, start=start_date, end=end_date, progress=False)
+        return stock_data
+    except Exception as e:
+        st.error(f"Error fetching data for {ticker}: {e}")
+        return pd.DataFrame()  # Return an empty DataFrame in case of error
 
 # Define function to plot historical trend line
 def plot_trend_line(data,selected_ticker):
