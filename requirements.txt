@@ -9,3 +9,4 @@ streamlit
 setuptools
 tensorflow
 matplotlib==3.5.1
+seaborn
