@@ -223,13 +223,11 @@ def create_sequence(dataset):
     start_idx += 1
   return (np.array(sequences),np.array(labels))
 
-def predict_lstm(train,test):
-
+def predict_lstm(train, test):
     # X_train, y_train = create_sequence(train)
     # X_test, y_test = create_sequence(test)
     y_train = train["Target"]
     X_train = train.drop(columns=["Target"])
-
 
     y_test = test["Target"]
     X_test = test.drop(columns=["Target"])
@@ -238,26 +236,30 @@ def predict_lstm(train,test):
     X_train_reshaped = np.array(X_train).reshape(X_train.shape[0], 1, X_train.shape[1])
     X_test_reshaped = np.array(X_test).reshape(X_test.shape[0], 1, X_test.shape[1])
 
-    # Define LSTM model architecture
-    model = Sequential()
-    model.add(LSTM(units=50, input_shape=(X_train_reshaped.shape[1], X_train_reshaped.shape[2])))
-    model.add(Dense(units=1, activation='sigmoid'))  # Output layer with sigmoid activation for binary classification
+    try:
+        # Define LSTM model architecture
+        model = Sequential()
+        model.add(LSTM(units=50, input_shape=(X_train_reshaped.shape[1], X_train_reshaped.shape[2])))
+        model.add(Dense(units=1, activation='sigmoid'))  # Output layer with sigmoid activation for binary classification
 
-    # Compile the model
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        # Compile the model
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-    # Train the model
-    model.fit(X_train_reshaped, y_train, epochs=10, batch_size=32, validation_split=0.2, shuffle=True, verbose=0)
+        # Train the model
+        model.fit(X_train_reshaped, y_train, epochs=10, batch_size=32, validation_split=0.2, shuffle=True, verbose=0)
 
-    # Evaluate the model on test data
-    preds=model.predict(X_test_reshaped)
-    preds=pd.Series(preds.flatten() ,index=test.index,name="Predictions")
-    preds[preds>=0.6]=1
-    preds[preds<0.6]=0
-    combined=pd.concat([test['Target'],preds],axis=1)
+        # Evaluate the model on test data
+        preds = model.predict(X_test_reshaped)
+        preds = (preds > 0.5).astype(int)  # Convert probabilities to binary predictions
 
-    return combined
+        preds = pd.Series(preds.flatten(), index=test.index, name="Predictions")
+        combined = pd.concat([test['Target'], preds], axis=1)
 
+        return combined
+    except Exception as e:
+        st.error(f"Error during LSTM prediction: {e}")
+        return pd.DataFrame()  # Return an empty DataFrame in case of error
+    
 def backtest_lstm(data, start=1250, step=250):
     all_predictions=[]
 
