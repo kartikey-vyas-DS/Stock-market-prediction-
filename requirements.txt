@@ -10,3 +10,4 @@ tensorflow
 matplotlib==3.5.1
 seaborn
 pandas_ta
+pandas_datareader
