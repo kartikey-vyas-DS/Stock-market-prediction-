@@ -394,8 +394,9 @@ def main():
 
       # XG Boost
       st.write(f"Model Training: XG boost...")
-      xgb_result=train_xgboost(train_data,test_data,feature_selected)
-      model_results = pd.concat([model_results, xgb_result], ignore_index=True)  # Select specific columns
+      show_progress_bar(50)  # Update progress bar
+      xgb_result = train_xgboost(train_data, test_data, feature_selected)
+      model_results = pd.concat([model_results, xgb_result], ignore_index=True) # Select specific columns
 
       # LSTM
       st.write(f"Model Training: LSTM...")
@@ -426,6 +427,12 @@ def main():
 
       st.write("Plotting historical trend line...")
       plot_trend_line(og_ticker_data,selected_ticker)
+
+      # Function to display progress bar
+    def show_progress_bar(progress):
+        st.write(f"Training Progress: {progress}%")
+        st.progress(progress)
+
 
 if __name__ == "__main__":
     main()
