@@ -318,6 +318,11 @@ def display_model_details(model_df, col):
     st.write(f"Backtest Accuracy: {model_df['Backtesting_Accuracy'].iloc[0]:.2%}")
     display_conditional_image(model_df['Prediction'].iloc[0])
     # Access and display other relevant columns from model_df here
+    
+# Function to display progress bar
+def show_progress_bar(progress):
+    st.write(f"Training Progress: {progress}%")
+    st.progress(progress)
 
 
 def main():
@@ -427,12 +432,6 @@ def main():
 
       st.write("Plotting historical trend line...")
       plot_trend_line(og_ticker_data,selected_ticker)
-
-      # Function to display progress bar
-    def show_progress_bar(progress):
-        st.write(f"Training Progress: {progress}%")
-        st.progress(progress)
-
 
 if __name__ == "__main__":
     main()
