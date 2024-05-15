@@ -20,7 +20,7 @@ yf.pdr_override() # <== that's all it takes :-)
 
 
 # Set page title
-st.set_page_config(page_title="StockPulse: Mapping Market Momentum",
+st.set_page_config(page_title="Market Momentum: Market Analysis with ML",
                    page_icon="🧊",
                    layout="wide")
 
@@ -34,7 +34,7 @@ def calendar_input():
 def get_indian_stock_tickers():
     # You may need to fetch this list from a reliable source or API
     # For demonstration purpose, I'll provide some example tickers
-    indian_tickers = {"Reliance":"RELIANCE.NS", "TCS" : "TCS.NS","Infosys": "INFY.NS","Nifty 50": "^NSEI"}
+    indian_tickers = {"Bank Nifty":"^NSEBANK", "NIFTY MIDCAP 50" : "^NSEMDCP50","NIFTY IT": "^CNXIT","Nifty 50": "^NSEI"}
 
     return indian_tickers
 
@@ -279,7 +279,7 @@ def show_progress_bar(progress):
 
 def main():
 
-    st.title("StockPulse: Mapping Market Momentum")
+    st.title("Market Momentum: Market Analysis with ML")
 
     # Get list of Indian stock tickers
     indian_stock_tickers = get_indian_stock_tickers()
