@@ -351,7 +351,7 @@ def main():
       # Decisiontree
       st.write(f"Model Training: Decisiontree")
       show_progress_bar(50)  # Update progress bar
-      Decisiontree_result=train_decision_tree(train_data,test_data)
+      Decisiontree_result = train_decision_tree(train_data, test_data, feature_selected)  # Call the function with appropriate arguments
       model_results = pd.concat([model_results, Decisiontree_result], ignore_index=True)  # Select specific columns
 
       # Display title or additional information at the top (optional)
