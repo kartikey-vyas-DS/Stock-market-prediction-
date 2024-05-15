@@ -6,9 +6,8 @@ import pandas as pd
 import pandas_ta as ta
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
-from xgboost import XGBClassifier
-from keras.models import Sequential
-from keras.layers import LSTM, Dense
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
