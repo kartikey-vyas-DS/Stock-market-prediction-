@@ -45,25 +45,30 @@ def get_historical_data(ticker, start_date, end_date):
     except Exception as e:
         st.error(f"Error fetching data for {ticker}: {e}")
         return pd.DataFrame()  # Return an empty DataFrame in case of error
+# Function to fetch historical stock data in the required format
+
+def get_historical_data_formatted(ticker, period="25y"):
+    # Fetch historical data
+    new_data = yf.Ticker(ticker).history(period=period)
+
+    # Reset index and convert 'Date' to a column
+    new_data.reset_index(inplace=True)
+
+    return new_data
 
 # Define function to plot historical trend line
-def plot_trend_line(data,selected_ticker):
-  # Check if data is downloaded successfully
-  if data.empty:
-    st.error("Error downloading data for " + selected_ticker)
-  else:
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    # Prepare data for visualization
-    data['Date']=data.index
-    data.reset_index(drop=True,inplace=True)
-
-    # Historical Trend Line with Seaborn
-    fig, ax = plt.subplots(figsize=(10, 6))  # Adjust figure size for better visualization
-    sns.lineplot(x="Date", y="Close", data=data)  # Use seaborn lineplot
-    plt.xlabel("Date")
-    plt.ylabel("Closing Price")
-    plt.title(f"Historical Trend for {selected_ticker}")
-    st.pyplot(fig)
+def plot_trend_line(new_data, selected_ticker):
+    # Check if data is downloaded successfully
+    if new_data.empty:
+        print("Error downloading data for " + selected_ticker)
+    else:
+        # Historical Trend Line with Seaborn
+        fig, ax = plt.subplots(figsize=(10, 6))  # Adjust figure size for better visualization
+        sns.lineplot(x="Date", y="Close", data=new_data)  # Use seaborn lineplot
+        plt.xlabel("Date")
+        plt.ylabel("Closing Price")
+        plt.title(f"Historical Trend for {selected_ticker}")
+        plt.show()
 
 def stock_data_preprocessing(data):
 
@@ -377,7 +382,8 @@ def main():
       # ... other app elements
 
       st.write("Plotting historical trend line...")
-      plot_trend_line(og_ticker_data,selected_ticker)
+      new_data = get_historical_data_formatted(selected_ticker)
+      plot_trend_line(new_data,selected_ticker)
 
 if __name__ == "__main__":
     main()
