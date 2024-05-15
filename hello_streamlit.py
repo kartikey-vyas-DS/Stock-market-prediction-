@@ -69,7 +69,7 @@ def plot_trend_line(new_data, selected_ticker):
         plt.xlabel("Date")
         plt.ylabel("Closing Price")
         plt.title(f"Historical Trend for {selected_ticker}")
-        plt.show()
+        st.pyplot(fig)
 
 def stock_data_preprocessing(data):
 
