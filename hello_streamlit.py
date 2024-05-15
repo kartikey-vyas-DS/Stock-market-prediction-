@@ -12,6 +12,7 @@ from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import seaborn as sns
+from PIL import Image
 import numpy as np
 from pandas_datareader import data as pdr
 import yfinance as yf
