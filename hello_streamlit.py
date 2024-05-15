@@ -257,9 +257,9 @@ def ensemble_prediction(results):
 
 def display_conditional_image(value):
   if value == 0:
-    st.image("https://drive.google.com/file/d/1FLFVqZG6J6iMvPgFtA4eEXwwlofctGOL/view?usp=sharing", caption="Bearish")
+    st.image("Bearish.png", caption="Bearish")
   else:
-    st.image("https://drive.google.com/file/d/1OxBNubZUNj_ItRcfzoEB9nM4NUbhe7SW/view?usp=sharing", caption="Bullish")
+    st.image("Bullish.png", caption="Bullish")
 
 def display_model_details(model_df, col):
   with col:
