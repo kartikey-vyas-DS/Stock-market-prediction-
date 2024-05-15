@@ -185,111 +185,56 @@ def train_randomforest(train_data,test_data,predictors):
 
   return pred_df
 
-def train_xgboost(train_data,test_data,predictors):
+def train_knn(train_data, test_data, predictors):
+    # Training Model
+    knn_model = KNeighborsClassifier(algorithm='auto',  # Auto algorithm selection
+                                     n_neighbors=3,      # Number of neighbors
+                                     weights='distance'  # Weighted by inverse of distance
+                                    )
 
-  # Training Model
-  xgb_model=xgb_classifier = XGBClassifier(objective='binary:logistic',  # Binary classification
-    use_label_encoder=False,  # Prevents warnings about deprecated label encoder
-    eval_metric='logloss')
+    # Backtesting
+    knn_model.fit(train_data[predictors], train_data["Target"])
+    backtest_predictions = knn_model.predict(train_data[predictors])
+    backtest_acc = accuracy_score(train_data["Target"], backtest_predictions)
 
-  # Backtesting
-  predictions=backtest(train_data,xgb_model,predictors)
-  backtest_acc=accuracy_score(predictions["Target"],predictions["Predictions"])
+    # Prediction
+    final_predictions = knn_model.predict(test_data[predictors])
 
-  # Prediction
-  final_predictions=predict(train_data.iloc[-1250:],test_data,predictors,xgb_model)
+    # Create DataFrame for predictions
+    pred_df = pd.DataFrame({
+        'Model_Name': 'KNN',
+        'Backtesting_Accuracy': backtest_acc,
+        'Prediction': final_predictions,
+        'Actual': test_data["Target"]
+    })
 
-  # Row
-  row={
-      'Model_Name':'XG Boost',
-      'Backtesting_Accuracy':backtest_acc,
-      'Prediction':final_predictions['Predictions'],
-      'Actual':final_predictions['Target']
-  }
-  pred_df=pd.DataFrame(row)
+    return pred_df
 
-  return pred_df
+def train_decision_tree(train_data, test_data, predictors):
+    # Training Model
+    dt_model = DecisionTreeClassifier(max_depth=9,             # Maximum depth of the tree
+                                      min_samples_leaf=1,     # Minimum samples required to be a leaf node
+                                      min_samples_split=2,    # Minimum samples required to split an internal node
+                                      random_state=1          # Seed for random number generator
+                                     )
 
-def create_sequence(dataset):
-  sequences = []
-  labels = []
+    # Backtesting
+    predictions = backtest(train_data, dt_model, predictors)
+    backtest_acc = accuracy_score(predictions["Target"], predictions["Predictions"])
 
-  start_idx = 0
-  include_cols_indices = [col_idx for col_idx, col_name in enumerate(dataset.columns) if col_name not in "Target"]
+    # Prediction
+    final_predictions = predict(train_data.iloc[-1250:], test_data, predictors, dt_model)
 
-  for stop_idx in range(30,len(dataset)): # Selecting 30 rows at a time
-    sequences.append(dataset.iloc[start_idx:stop_idx,include_cols_indices])
-    labels.append(dataset.iloc[stop_idx]["Target"])
-    start_idx += 1
-  return (np.array(sequences),np.array(labels))
+    # Create DataFrame for predictions
+    row = {
+        'Model_Name': 'Decision Tree',
+        'Backtesting_Accuracy': backtest_acc,
+        'Prediction': final_predictions['Predictions'],
+        'Actual': final_predictions['Target']
+    }
+    pred_df = pd.DataFrame(row)
 
-def predict_lstm(train, test):
-    # X_train, y_train = create_sequence(train)
-    # X_test, y_test = create_sequence(test)
-    y_train = train["Target"]
-    X_train = train.drop(columns=["Target"])
-
-    y_test = test["Target"]
-    X_test = test.drop(columns=["Target"])
-
-    # Reshape Input Data for LSTM
-    X_train_reshaped = np.array(X_train).reshape(X_train.shape[0], 1, X_train.shape[1])
-    X_test_reshaped = np.array(X_test).reshape(X_test.shape[0], 1, X_test.shape[1])
-
-    try:
-        # Define LSTM model architecture
-        model = Sequential()
-        model.add(LSTM(units=50, input_shape=(X_train_reshaped.shape[1], X_train_reshaped.shape[2])))
-        model.add(Dense(units=1, activation='sigmoid'))  # Output layer with sigmoid activation for binary classification
-
-        # Compile the model
-        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
-        # Train the model
-        model.fit(X_train_reshaped, y_train, epochs=10, batch_size=32, validation_split=0.2, shuffle=True, verbose=0)
-
-        # Evaluate the model on test data
-        preds = model.predict(X_test_reshaped)
-        preds = (preds > 0.5).astype(int)  # Convert probabilities to binary predictions
-
-        preds = pd.Series(preds.flatten(), index=test.index, name="Predictions")
-        combined = pd.concat([test['Target'], preds], axis=1)
-
-        return combined
-    except Exception as e:
-        st.error(f"Error during LSTM prediction: {e}")
-        return pd.DataFrame()  # Return an empty DataFrame in case of error
-    
-def backtest_lstm(data, start=1250, step=250):
-    all_predictions=[]
-
-    for i in range(start,data.shape[0],step):
-      train=data.iloc[0:i].copy()
-      test=data.iloc[i:i+step].copy()
-      predictions=predict_lstm(train,test)
-      # predictions = predictions.fillna(0)
-      all_predictions.append(predictions)
-
-    return pd.concat(all_predictions)
-
-def train_lstm(train_data,test_data):
-  # Backtesting
-  predictions=backtest_lstm(train_data)
-  backtest_acc=accuracy_score(predictions["Target"],predictions["Predictions"])
-
-  # Prediction
-  final_predictions=predict_lstm(train_data.iloc[-1250:],test_data)
-
-  # Row
-  row={
-      'Model_Name':'LSTM',
-      'Backtesting_Accuracy':backtest_acc,
-      'Prediction':final_predictions['Predictions'],
-      'Actual':final_predictions['Target']
-  }
-  pred_df=pd.DataFrame(row)
-
-  return pred_df
+    return pred_df
 
 def ensemble_prediction(results):
   # converting 0 to 2
@@ -318,7 +263,7 @@ def display_model_details(model_df, col):
     st.write(f"Backtest Accuracy: {model_df['Backtesting_Accuracy'].iloc[0]:.2%}")
     display_conditional_image(model_df['Prediction'].iloc[0])
     # Access and display other relevant columns from model_df here
-    
+
 # Function to display progress bar
 def show_progress_bar(progress):
     st.write(f"Training Progress: {progress}%")
@@ -394,19 +339,21 @@ def main():
 
       # Random Forest
       st.write(f"Model Training: Random Forest...")
+      show_progress_bar(50)  # Update progress bar
       rf_result=train_randomforest(train_data,test_data,feature_selected)
       model_results = pd.concat([model_results, rf_result], ignore_index=True)
 
-      # XG Boost
-      st.write(f"Model Training: XG boost...")
+      # KNN
+      st.write(f"Model Training: KNN")
       show_progress_bar(50)  # Update progress bar
-      xgb_result = train_xgboost(train_data, test_data, feature_selected)
-      model_results = pd.concat([model_results, xgb_result], ignore_index=True) # Select specific columns
+      KNN_result = train_knn(train_data, test_data, feature_selected)
+      model_results = pd.concat([model_results, KNN_result], ignore_index=True) # Select specific columns
 
-      # LSTM
-      st.write(f"Model Training: LSTM...")
-      lstm_result=train_lstm(train_data,test_data)
-      model_results = pd.concat([model_results, lstm_result], ignore_index=True)  # Select specific columns
+      # Decisiontree
+      st.write(f"Model Training: Decisiontree")
+      show_progress_bar(50)  # Update progress bar
+      Decisiontree_result=train_decision_tree(train_data,test_data)
+      model_results = pd.concat([model_results, Decisiontree_result], ignore_index=True)  # Select specific columns
 
       # Display title or additional information at the top (optional)
       st.title("Model Predictions")
