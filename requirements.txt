@@ -8,4 +8,4 @@ seaborn
 pandas_ta
 pandas_datareader
 yfinance
-Pillow==8.4.0
+Pillow
