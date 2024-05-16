@@ -48,7 +48,7 @@ def get_historical_data(ticker, start_date, end_date):
         return pd.DataFrame()  # Return an empty DataFrame in case of error
 # Function to fetch historical stock data in the required format
 
-def get_historical_data_formatted(ticker, period="25y"):
+def get_historical_data_formatted(ticker, period="1y"):
     try:
         # Fetch historical data
         new_data = yf.Ticker(ticker).history(period=period)
