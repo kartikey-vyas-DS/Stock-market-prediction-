@@ -307,6 +307,12 @@ def main():
 
     # Button to fetch data and plot trend line
     if st.button("Go"):
+      # Fetch historical data
+      new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
+
+      # Display the fetched historical data in a table
+      st.write("Fetched Historical Data:")
+      st.write(new_data)
       # Input Parameter
       train_start_date='2000-01-01'
       train_end_date=prediction_date- timedelta(days = 1)
@@ -394,7 +400,6 @@ def main():
       # Display title or additional information at the top (optional)
       st.title("Statistics")
       # ... other app elements
-
       st.write("Plotting historical trend line...")
       new_data = get_historical_data_formatted(selected_ticker)
       plot_trend_line(new_data,selected_ticker)
