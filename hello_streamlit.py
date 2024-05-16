@@ -400,7 +400,7 @@ def main():
       # Display title or additional information at the top (optional)
       st.title("Statistics")
       # ... other app elements
-      new_data = yf.Ticker(selected_ticker).history(period='1y')
+      new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
       st.write("Plotting Historical Trend Line:")
       fig, ax = plt.subplots(figsize=(10, 6))
       sns.lineplot(x="Date", y="Close", data=new_data)
