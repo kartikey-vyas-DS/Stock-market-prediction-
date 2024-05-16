@@ -57,8 +57,9 @@ def get_historical_data_formatted(ticker, period="1y"):
         new_data.reset_index(inplace=True)
         new_data["Date"] = pd.to_datetime(new_data["Date"])
 
-        # Convert "Close" column to float
-        new_data["Close"] = new_data["Close"].replace(",", "", regex=True).astype(float)
+        # Remove commas and convert "Close" column to float
+        new_data["Close"] = new_data["Close"].str.replace(",", "").astype(float)
+
         # Print the first few rows of the fetched data
         print("Fetched Historical Data:")
         print(new_data.head())
