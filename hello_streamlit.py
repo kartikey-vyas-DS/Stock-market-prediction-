@@ -400,7 +400,13 @@ def main():
       # Display title or additional information at the top (optional)
       st.title("Statistics")
       # ... other app elements
+            # Fetch historical data
       new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
+
+      # Display the fetched historical data in a table
+      st.write("Fetched Historical Data:")
+      st.write(new_data)
+      # new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
       st.write("Plotting Historical Trend Line:")
       fig, ax = plt.subplots(figsize=(10, 6))
       sns.lineplot(x="Date", y="Close", data=new_data)
