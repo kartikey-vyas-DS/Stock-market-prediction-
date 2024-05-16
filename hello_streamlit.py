@@ -308,11 +308,11 @@ def main():
     # Button to fetch data and plot trend line
     if st.button("Go"):
       # Fetch historical data
-      new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
+      # new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
 
       # Display the fetched historical data in a table
-      st.write("Fetched Historical Data:")
-      st.write(new_data)
+      # st.write("Fetched Historical Data:")
+      # st.write(new_data)
       # Input Parameter
       train_start_date='2000-01-01'
       train_end_date=prediction_date- timedelta(days = 1)
@@ -401,8 +401,14 @@ def main():
       st.title("Statistics")
       # ... other app elements
       st.write("Plotting historical trend line...")
-      new_data = get_historical_data_formatted(selected_ticker)
-      plot_trend_line(new_data,selected_ticker)
+      # Plot the historical trend line using Seaborn
+      st.write("Plotting Historical Trend Line:")
+      fig, ax = plt.subplots(figsize=(10, 6))
+      sns.lineplot(x="Date", y="Close", data=new_data)
+      plt.xlabel("Date")
+      plt.ylabel("Closing Price")
+      plt.title(f"Historical Trend for {selected_ticker}")
+      st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
