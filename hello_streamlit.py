@@ -53,6 +53,10 @@ def get_historical_data_formatted(ticker, period="1y"):
         # Fetch historical data
         new_data = yf.Ticker(ticker).history(period=period)
 
+        if new_data.empty:
+            print(f"No data found for {ticker} for the specified period.")
+            return pd.DataFrame()  # Return an empty DataFrame
+
         # Reset index and convert 'Date' to a column
         new_data.reset_index(inplace=True)
         new_data["Date"] = pd.to_datetime(new_data["Date"])
