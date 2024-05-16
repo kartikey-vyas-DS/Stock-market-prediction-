@@ -55,7 +55,10 @@ def get_historical_data_formatted(ticker, period="1y"):
 
         # Reset index and convert 'Date' to a column
         new_data.reset_index(inplace=True)
+        new_data["Date"] = pd.to_datetime(new_data["Date"])
 
+        # Convert "Close" column to float
+        new_data["Close"] = new_data["Close"].replace(",", "", regex=True).astype(float)
         # Print the first few rows of the fetched data
         print("Fetched Historical Data:")
         print(new_data.head())
@@ -403,10 +406,7 @@ def main():
             # Fetch historical data
       new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
       # Convert "Date" column to datetime
-      new_data["Date"] = pd.to_datetime(new_data["Date"])
 
-      # Convert "Close" column to float
-      new_data["Close"] = new_data["Close"].replace(",", "", regex=True).astype(float)
       # Display the fetched historical data in a table
       st.write("Fetched Historical Data:")
       st.write(new_data.tail())
