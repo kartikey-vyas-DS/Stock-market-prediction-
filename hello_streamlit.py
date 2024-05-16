@@ -406,7 +406,7 @@ def main():
       new_data["Date"] = pd.to_datetime(new_data["Date"])
 
       # Convert "Close" column to float
-      new_data["Close"] = new_data["Close"].str.replace(",", "").astype(float)
+      new_data["Close"] = new_data["Close"].replace(",", "", regex=True).astype(float)
       # Display the fetched historical data in a table
       st.write("Fetched Historical Data:")
       st.write(new_data.tail())
