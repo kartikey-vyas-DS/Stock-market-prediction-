@@ -49,13 +49,21 @@ def get_historical_data(ticker, start_date, end_date):
 # Function to fetch historical stock data in the required format
 
 def get_historical_data_formatted(ticker, period="25y"):
-    # Fetch historical data
-    new_data = yf.Ticker(ticker).history(period=period)
+    try:
+        # Fetch historical data
+        new_data = yf.Ticker(ticker).history(period=period)
 
-    # Reset index and convert 'Date' to a column
-    new_data.reset_index(inplace=True)
+        # Reset index and convert 'Date' to a column
+        new_data.reset_index(inplace=True)
 
-    return new_data
+        # Print the first few rows of the fetched data
+        print("Fetched Historical Data:")
+        print(new_data.head())
+
+        return new_data
+    except Exception as e:
+        print(f"Error fetching historical data for {ticker}: {e}")
+        return pd.DataFrame()  # Return an empty DataFrame in case of error
 
 # Define function to plot historical trend line
 def plot_trend_line(new_data, selected_ticker):
