@@ -402,11 +402,15 @@ def main():
       # ... other app elements
             # Fetch historical data
       new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
+      # Convert "Date" column to datetime
+      new_data["Date"] = pd.to_datetime(new_data["Date"])
 
+      # Convert "Close" column to float
+      new_data["Close"] = new_data["Close"].str.replace(",", "").astype(float)
       # Display the fetched historical data in a table
       st.write("Fetched Historical Data:")
       st.write(new_data.tail())
-      st.write(new_data.info())
+      # st.write(new_data.info())
       # new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
       st.write("Plotting Historical Trend Line:")
       fig, ax = plt.subplots(figsize=(10, 6))
