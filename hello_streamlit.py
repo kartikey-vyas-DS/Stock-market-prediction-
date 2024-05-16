@@ -63,6 +63,9 @@ def plot_trend_line(new_data, selected_ticker):
     if new_data.empty:
         print("Error downloading data for " + selected_ticker)
     else:
+        # Print the first few rows of the data
+        print("Sample Data:")
+        print(new_data.head())
         # Historical Trend Line with Seaborn
         fig, ax = plt.subplots(figsize=(10, 6))  # Adjust figure size for better visualization
         sns.lineplot(x="Date", y="Close", data=new_data)  # Use seaborn lineplot
