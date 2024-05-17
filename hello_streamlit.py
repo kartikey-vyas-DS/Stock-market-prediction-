@@ -83,17 +83,24 @@ def plot_trend_line(new_data, selected_ticker):
         return st.pyplot(fig)
     
 def plot_trend_line_usingmatplot(new_data, selected_ticker):
-    # Check if data is downloaded successfully
-    if new_data.empty:
-        print("Error downloading data for " + selected_ticker)
-    else:
-        # Plotting with Matplotlib
-        fig, ax = plt.subplots(figsize=(10, 6))  # Adjust figure size for better visualization
-        ax.plot(new_data["Date"], new_data["Close"])  # Plotting the data
-        ax.set_xlabel("Date")
-        ax.set_ylabel("Closing Price")
-        ax.set_title(f"Historical Trend for {selected_ticker}")
-        return st.pyplot(fig)
+    try:
+        # Check if data is downloaded successfully
+        if new_data.empty:
+            print("Error downloading data for " + selected_ticker)
+        else:
+            # Print the first few rows of the data
+            print("Sample Data:")
+            print(new_data.head())
+            
+            # Plotting with Matplotlib
+            fig, ax = plt.subplots(figsize=(10, 6))  # Adjust figure size for better visualization
+            ax.plot(new_data["Date"], new_data["Close"])  # Plotting the data
+            ax.set_xlabel("Date")
+            ax.set_ylabel("Closing Price")
+            ax.set_title(f"Historical Trend for {selected_ticker}")
+            return st.pyplot(fig)
+    except Exception as e:
+        print(f"Error plotting historical trend line with Matplotlib: {e}")
 
 def stock_data_preprocessing(data):
 
