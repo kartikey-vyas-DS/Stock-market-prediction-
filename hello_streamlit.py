@@ -102,6 +102,17 @@ def plot_trend_line_usingmatplot(new_data, selected_ticker):
     except Exception as e:
         print(f"Error plotting historical trend line with Matplotlib: {e}")
 
+def price_plot(new_data,selected_ticker):
+  new_data['Date'] = new_data.index
+  fig = plt.figure()
+  plt.fill_between(new_data.Date, new_data.Close, color='skyblue', alpha=0.3)
+  plt.plot(new_data.Date, new_data.Close, color='skyblue', alpha=0.8)
+  plt.xticks(rotation=90)
+  plt.title(selected_ticker, fontweight='bold')
+  plt.xlabel('Date', fontweight='bold')
+  plt.ylabel('Closing Price', fontweight='bold')
+  return st.pyplot(fig)
+
 def stock_data_preprocessing(data):
 
   # 1. Create Date Column
@@ -434,7 +445,7 @@ def main():
       # new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
       st.write("Plotting Historical Trend Line:")
 
-      plot_trend_line_usingmatplot(new_data,selected_ticker)
+      price_plot(new_data,selected_ticker)
 
 if __name__ == "__main__":
     main()
