@@ -408,7 +408,7 @@ def main():
       st.write("Fetched Historical Data:")
       st.write(new_data.tail())
       st.write(new_data.dtypes)
-      st.write(new_data.info())
+      st.write(new_data.isnull().sum())
       st.write(new_data.columns)
       # st.write(new_data.info())
       # new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
