@@ -59,14 +59,6 @@ def get_historical_data_formatted(ticker, period="1y"):
 
         # Reset index and convert 'Date' to a column
         new_data.reset_index(inplace=True)
-        new_data["Date"] = pd.to_datetime(new_data["Date"])
-
-        # Remove commas and convert "Close" column to float
-        new_data["Close"] = new_data["Close"].str.replace(",", "").astype(float)
-
-        # Print the first few rows of the fetched data
-        print("Fetched Historical Data:")
-        print(new_data.head())
 
         return new_data
     except Exception as e:
@@ -88,7 +80,7 @@ def plot_trend_line(new_data, selected_ticker):
         plt.xlabel("Date")
         plt.ylabel("Closing Price")
         plt.title(f"Historical Trend for {selected_ticker}")
-        st.pyplot(fig)
+        return st.pyplot(fig)
 
 def stock_data_preprocessing(data):
 
@@ -418,12 +410,8 @@ def main():
       # st.write(new_data.info())
       # new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
       st.write("Plotting Historical Trend Line:")
-      fig, ax = plt.subplots(figsize=(10, 6))
-      sns.lineplot(x="Date", y="Close", data=new_data)
-      plt.xlabel("Date")
-      plt.ylabel("Closing Price")
-      plt.title(f"Historical Trend for {selected_ticker}")
-      st.pyplot(fig)
+
+      plot_trend_line(new_data,selected_ticker)
 
 if __name__ == "__main__":
     main()
