@@ -81,6 +81,19 @@ def plot_trend_line(new_data, selected_ticker):
         plt.ylabel("Closing Price")
         plt.title(f"Historical Trend for {selected_ticker}")
         return st.pyplot(fig)
+    
+def plot_trend_line_usingmatplot(new_data, selected_ticker):
+    # Check if data is downloaded successfully
+    if new_data.empty:
+        print("Error downloading data for " + selected_ticker)
+    else:
+        # Plotting with Matplotlib
+        fig, ax = plt.subplots(figsize=(10, 6))  # Adjust figure size for better visualization
+        ax.plot(new_data["Date"], new_data["Close"])  # Plotting the data
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Closing Price")
+        ax.set_title(f"Historical Trend for {selected_ticker}")
+        return st.pyplot(fig)
 
 def stock_data_preprocessing(data):
 
@@ -407,14 +420,14 @@ def main():
       # Display the fetched historical data in a table
       st.write("Fetched Historical Data:")
       st.write(new_data.tail())
-      st.write(new_data.dtypes)
-      st.write(new_data.isnull().sum())
-      st.write(new_data.columns)
+      # st.write(new_data.dtypes)
+      # st.write(new_data.isnull().sum())
+      # st.write(new_data.columns)
       # st.write(new_data.info())
       # new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
       st.write("Plotting Historical Trend Line:")
 
-      plot_trend_line(new_data,selected_ticker)
+      plot_trend_line_usingmatplot(new_data,selected_ticker)
 
 if __name__ == "__main__":
     main()
