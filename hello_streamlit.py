@@ -81,37 +81,17 @@ def plot_trend_line(new_data, selected_ticker):
         plt.ylabel("Closing Price")
         plt.title(f"Historical Trend for {selected_ticker}")
         return st.pyplot(fig)
-    
-def plot_trend_line_usingmatplot(new_data, selected_ticker):
-    try:
-        # Check if data is downloaded successfully
-        if new_data.empty:
-            print("Error downloading data for " + selected_ticker)
-        else:
-            # Print the first few rows of the data
-            print("Sample Data:")
-            print(new_data.head())
-            
-            # Plotting with Matplotlib
-            fig, ax = plt.subplots(figsize=(10, 6))  # Adjust figure size for better visualization
-            ax.plot(new_data["Date"], new_data["Close"])  # Plotting the data
-            ax.set_xlabel("Date")
-            ax.set_ylabel("Closing Price")
-            ax.set_title(f"Historical Trend for {selected_ticker}")
-            return st.pyplot(fig)
-    except Exception as e:
-        print(f"Error plotting historical trend line with Matplotlib: {e}")
 
-def price_plot(new_data,selected_ticker):
-  new_data['Date'] = new_data.index
-  fig = plt.figure()
-  plt.fill_between(new_data.Date, new_data.Close, color='skyblue', alpha=0.3)
-  plt.plot(new_data.Date, new_data.Close, color='skyblue', alpha=0.8)
-  plt.xticks(rotation=90)
-  plt.title(selected_ticker, fontweight='bold')
-  plt.xlabel('Date', fontweight='bold')
-  plt.ylabel('Closing Price', fontweight='bold')
-  return st.pyplot(fig)
+def price_plot(new_data, selected_ticker):
+    new_data[new_data.columns[0]] = new_data.index  # Assign index values to the first column
+    fig = plt.figure()
+    plt.fill_between(new_data[new_data.columns[0]], new_data[new_data.columns[4]], color='skyblue', alpha=0.3)
+    plt.plot(new_data[new_data.columns[0]], new_data[new_data.columns[4]], color='skyblue', alpha=0.8)
+    plt.xticks(rotation=90)
+    plt.title(selected_ticker, fontweight='bold')
+    plt.xlabel('Date', fontweight='bold')
+    plt.ylabel('Closing Price', fontweight='bold')
+    return st.pyplot(fig)
 
 def stock_data_preprocessing(data):
 
@@ -333,8 +313,18 @@ def main():
     today = date.today()
     default_date = today - timedelta(days = 1)
 
+      # Calculate the maximum selectable date based on the restrictions
+    max_selectable_date = today + timedelta(days=1)  # Limit to 1 day more than the current day
+
+    # Handle weekend cases
+    if max_selectable_date.weekday() == 5:  # Saturday
+        max_selectable_date += timedelta(days=2)  # Skip Sunday and select Monday
+    elif max_selectable_date.weekday() == 6:  # Sunday
+        max_selectable_date += timedelta(days=1)  # Skip Sunday and select Monday
+
+
     # Display the calendar-like date selection
-    prediction_date=st.date_input(label="Select Prediction Date",value=default_date)
+    prediction_date=st.date_input(label="Select Prediction Date",value=default_date,min_value=today, max_value=max_selectable_date)
 
     # Button to fetch data and plot trend line
     if st.button("Go"):
@@ -429,11 +419,10 @@ def main():
 
 
       # Display title or additional information at the top (optional)
-      st.title("Statistics")
+      st.title("Historical Data")
       # ... other app elements
             # Fetch historical data
       new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
-      # Convert "Date" column to datetime
 
       # Display the fetched historical data in a table
       st.write("Fetched Historical Data:")
@@ -442,10 +431,9 @@ def main():
       # st.write(new_data.isnull().sum())
       # st.write(new_data.columns)
       # st.write(new_data.info())
-      # new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
-      st.write("Plotting Historical Trend Line:")
-
-      price_plot(new_data,selected_ticker)
+      # # new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
+      # st.write("Plotting Historical Trend Line:")
+      price_plot(new_data, selected_ticker)
 
 if __name__ == "__main__":
     main()
