@@ -317,8 +317,8 @@ def main():
     max_selectable_date = today + timedelta(days=1)  # Limit to 1 day more than the current day
 
     # Handle weekend cases
-    if max_selectable_date.weekday() >= 5:  # Saturday or Sunday
-        max_selectable_date += timedelta(days=(7 - max_selectable_date.weekday()))  # Move to next Monday
+    if today.weekday() >= 5:  # Saturday or Sunday
+        max_selectable_date += timedelta(days=(7 - today.weekday()))  # Move to next Monday
 
     # Display the calendar-like date selection with the maximum selectable date
     prediction_date = st.date_input("Select Prediction Date", value=default_date, min_value=today, max_value=max_selectable_date)
