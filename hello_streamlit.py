@@ -34,7 +34,7 @@ def calendar_input():
 def get_indian_stock_tickers():
     # You may need to fetch this list from a reliable source or API
     # For demonstration purpose, I'll provide some example tickers
-    indian_tickers = {"Bank Nifty":"^NSEBANK", "NIFTY MIDCAP 50" : "^NSEMDCP50","NIFTY IT": "^CNXIT","Nifty 50": "^NSEI"}
+    indian_tickers = {"Bank Nifty":"^NSEBANK", "NIFTY MIDCAP 50" : "^NSEMDCP50","NIFTY IT": "^CNXIT","Nifty 50": "^NSEI","Nifty Pharma":"^CNXPHARMA"}
 
     return indian_tickers
 
@@ -81,17 +81,6 @@ def plot_trend_line(new_data, selected_ticker):
         plt.ylabel("Closing Price")
         plt.title(f"Historical Trend for {selected_ticker}")
         return st.pyplot(fig)
-
-def price_plot(new_data, selected_ticker):
-    new_data[new_data.columns[0]] = new_data.index  # Assign index values to the first column
-    fig = plt.figure()
-    plt.fill_between(new_data[new_data.columns[0]], new_data[new_data.columns[4]], color='skyblue', alpha=0.3)
-    plt.plot(new_data[new_data.columns[0]], new_data[new_data.columns[4]], color='skyblue', alpha=0.8)
-    plt.xticks(rotation=90)
-    plt.title(selected_ticker, fontweight='bold')
-    plt.xlabel('Date', fontweight='bold')
-    plt.ylabel('Closing Price', fontweight='bold')
-    return st.pyplot(fig)
 
 def stock_data_preprocessing(data):
 
@@ -416,14 +405,13 @@ def main():
 
       # Display the fetched historical data in a table
       st.write("Fetched Historical Data:")
-      st.write(new_data.tail())
+      st.write(new_data.tail(10))
       # st.write(new_data.dtypes)
       # st.write(new_data.isnull().sum())
       # st.write(new_data.columns)
       # st.write(new_data.info())
       # # new_data = get_historical_data_formatted(indian_stock_tickers.get(selected_ticker))
       # st.write("Plotting Historical Trend Line:")
-      price_plot(new_data, selected_ticker)
 
 if __name__ == "__main__":
     main()
