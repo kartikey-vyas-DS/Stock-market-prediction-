@@ -52,23 +52,26 @@ def new_ensemble_prediction(model_results):
 ```
 
 📊 Sample Output
-CopyPrediction for Nifty 50 on 2024-08-15:
-Random Forest: Backtest Accuracy: 52.34%, Prediction: 📈 Bullish
-KNN: Backtest Accuracy: 48.67%, Prediction: 📉 Bearish
-Decision Tree: Backtest Accuracy: 51.12%, Prediction: 📈 Bullish
-XGBoost: Backtest Accuracy: 53.89%, Prediction: 📈 Bullish
 
-Final Prediction: 📈 Bullish
+- Prediction for Nifty 50 on 2024-08-15:
+- Random Forest: Backtest Accuracy: 52.34%, Prediction: 📈 Bullish
+- KNN: Backtest Accuracy: 48.67%, Prediction: 📉 Bearish
+- Decision Tree: Backtest Accuracy: 51.12%, Prediction: 📈 Bullish
+- XGBoost: Backtest Accuracy: 53.89%, Prediction: 📈 Bullish
+
+- Final Prediction: 📈 Bullish
+
 ⚠️ Disclaimer
-This tool is for educational and informational purposes only. Always conduct your own research and consult with a qualified financial advisor before making investment decisions.
-🤝 Contributing
-We welcome contributions! If you have ideas for improvements or bug fixes, please open an issue or submit a pull request.
-📬 Contact
-For more projects and information, visit my portfolio: [https://kartikey-vyas-ds.github.io/]
 
-Created with ❤️ by Kartikey Vyas
+- This tool is for educational and informational purposes only. Always conduct your own research and consult with a qualified financial advisor before making investment decisions.
+
+🤝 Contributing
+
+We welcome contributions! If you have ideas for improvements or bug fixes, please open an issue or submit a pull request.
 
 ## Contact
+
+For more projects and information, visit my portfolio: [https://kartikey-vyas-ds.github.io/]
 
 If you have any feedback/are interested in collaborating, please reach out to me at [<img height="40" src="https://img.icons8.com/color/48/000000/linkedin.png" height="40em" align="center" alt="Follow Kartikey on LinkedIn" title="Follow Kartikey on LinkedIn"/>](https://www.linkedin.com/in/kartikey-vyas-2a29b9273) &nbsp; <a href="mailto:kvsvyas@gmail.com"> <img height="40" src="https://img.icons8.com/fluent/48/000000/gmail.png" align="center" />
 
