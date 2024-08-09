@@ -49,6 +49,8 @@ def new_ensemble_prediction(model_results):
     total_weight = weights.sum()
     final_prediction = weighted_predictions / total_weight
     return 1 if final_prediction >= 0.5 else 0
+```
+
 📊 Sample Output
 CopyPrediction for Nifty 50 on 2024-08-15:
 Random Forest: Backtest Accuracy: 52.34%, Prediction: 📈 Bullish
